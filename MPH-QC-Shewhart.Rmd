@@ -1,0 +1,402 @@
+---
+title: "MPH-LQC 2ppb"
+author: "Viola Nguyen"
+date: "2024-12-13"
+output: html_document
+---
+
+
+```{r Loading packages, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
+library(arrow)
+
+library(cowplot)
+library(corrplot)
+library(cli)
+
+library(dplyr)
+library(data.table)
+
+
+library(httr)
+library(janitor)
+
+library(ggplot2)
+library(ggvenn)
+library(gghighlight)
+library(gridExtra)
+
+library(ggtext)
+
+library(kableExtra)
+library(lubridate)
+
+library(magrittr)
+
+library(openintro)
+library(openxlsx)
+library(pastecs)
+library(pdftools)
+library(plotly)
+
+
+library(RColorBrewer)
+library(rio)
+library(readr)
+library(readxl)
+
+library(stringr)
+
+
+library(tibble)
+library(tidyverse)
+library(tidyr)
+
+
+library(VennDiagram)
+
+library(reshape2)
+library(forcats)
+library(dplyr)
+
+```
+
+```{r CHARGE Reference sheets, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
+#Loading Reference sheets
+
+#CHARGE file with weights and notes
+mph_112824<- read_excel('C:\\Users\\nguyet53\\Documents\\GitHub\\MPH\\Copy of Matrix calibration-MRM method_All results_updated112824.xlsx')
+
+notes_MPH<- read_excel('C:\\Users\\nguyet53\\Documents\\GitHub\\MPH\\Matrix calibration-MRM method_All results_updated121624.xlsx')
+
+```
+
+
+
+
+```{r setup, include=FALSE}
+
+
+stats_mph_112824<-(mph_112824) %>% 
+  as.tibble() %>% 
+  select(`MPH-TFA Final Conc.`) %>%
+  summarise_all(funs(mean,sd)) %>%
+  mutate(`sd+1`=(`mean` + `sd`),
+         `sd-1`= (`mean` - `sd`),
+         `sd+2`= (`mean` + 2*(`sd`)),
+         `sd-2`= (`mean` - 2*(`sd`))
+          
+         ) %>% 
+  as.data.frame(stats_mph_112824)
+
+
+stats_ra_112824<-(mph_112824) %>% 
+  as.tibble() %>% 
+  select(`RA-TFATMS Final Conc.`) %>%
+  summarise_all(funs(mean,sd)) %>%
+  mutate(`sd+1`=(`mean` + `sd`),
+         `sd-1`= (`mean` - `sd`),
+         `sd+2`= (`mean` + 2*(`sd`)),
+         `sd-2`= (`mean` - 2*(`sd`))
+          
+         ) %>% 
+  as.data.frame(stats_ra_112824)
+
+```
+
+
+
+
+```{r MPH plot: Running average distribution, echo=FALSE,message=FALSE,warning=FALSE,  fig.height = 6, fig.width =8}
+vit_c_palette <- c("2T" = "#FEF1CD", 
+                   "3T" = "#FCD56B",
+                   "Post"= "#EB8D07",
+                   light_text = "#323A30",
+                   dark_text =  "#0C1509")
+
+mph_min<-mph_112824 %>% 
+  as.data.frame() %>% 
+  select(`MPH-TFA Final Conc.`) %>% 
+  apply(2, min)
+
+mph_max<-mph_112824 %>% 
+  as.data.frame() %>% 
+  select(`MPH-TFA Final Conc.`) %>% 
+  apply(2, max)
+
+mph_hline <- data.frame(
+  mean = c(stats_mph_112824$`mean`),
+  sd1 = c(stats_mph_112824$`sd+1`),
+  sd_1 = c(stats_mph_112824$`sd-1`),
+  sd2 = c(stats_mph_112824$`sd+2`),
+  sd_2 = c(stats_mph_112824$`sd-2`),
+  linetype_mean = factor(1,labels = c("1")),
+  linetype_sd1 = factor(1,labels = c("4")),
+  linetype_sd2 = factor(1,labels = c("6")))
+
+max_min_spiked_mph <- tibble(
+  y_min = c(mph_min),
+  y_max = c(mph_max)
+)
+
+avg_plot2<- mph_112824 %>%
+  ggplot(aes(x = Name, y = `MPH-TFA Final Conc.`)) + 
+        geom_blank(aes(y = max_min_spiked_mph$y_min)) +
+    geom_blank(aes(y = max_min_spiked_mph$y_max))+
+  geom_line(aes(color=`Name`)) + 
+  geom_point(aes(color=`Name`)) +
+  geom_hline(data = mph_hline, aes(yintercept = mph_hline$mean,linetype = factor(mph_hline$linetype_mean), show_guide = TRUE),
+            color = "blue", size=0.6)+
+  geom_hline(data = mph_hline, aes(yintercept = mph_hline$sd1, linetype = factor(mph_hline$linetype_sd1), show_guide=TRUE),
+             color = "black", size=0.5)+
+  geom_hline(data = mph_hline, aes(yintercept = mph_hline$sd_1, linetype = factor(mph_hline$linetype_sd1), show_guide = TRUE),
+             color = "black", size=0.5)+
+  geom_hline(data = mph_hline, aes(yintercept = mph_hline$sd2, linetype = factor(mph_hline$linetype_sd2), show_guide = TRUE),
+             color = "darkgray", size=0.5)+
+  geom_hline(data = mph_hline, aes(yintercept = mph_hline$sd_2, linetype = factor(mph_hline$linetype_sd2), show_guide = TRUE),
+             color = "darkgray", size=0.5)+
+  guides(color="none")+
+  scale_linetype_manual(values = c(1,5,6), 
+                        labels = c("Running Average", "+/- 1 SD", "+/- 2 SD"),
+                        name = "Control Chart")+
+  theme(axis.title.y = element_text(size=10, face="bold", colour = "black"),
+        axis.text.y = element_text(size=10, face="bold", colour = "black"),
+        strip.text = element_text(face = "bold", size=10))+
+  labs(y="Concentration [ppb]", x = "Sample Name", 
+       title =  paste0("Shewhart chart : Methylphenidate (Spiked) \nmph Control chart, Quality Controls for fluctuation assesment "))+
+  scale_fill_manual(values = vit_c_palette)+
+  scale_y_continuous(trans='log10')+
+  theme(text = element_text(colour = vit_c_palette["light_text"],family = "Cabin"),
+        plot.title = element_text(colour = vit_c_palette["dark_text"], #plot title
+                                  size = rel(1), 
+                                  face = "bold",
+                                  family = "Enriqueta",
+                                  lineheight = 1,
+                                  margin = margin(0.5, 0, 1, 0, "lines")),
+        plot.subtitle = element_text(size = rel(1), lineheight = 1,
+                                     margin = margin(0, 0, 1, 0, "lines")),
+        strip.text = element_text(family = "Enriqueta",
+                                  colour = vit_c_palette["light_text"], face = "bold"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+avg_plot2  
+```
+
+
+```{r RA plot: Running average distribution, echo=FALSE,message=FALSE,warning=FALSE,  fig.height = 6, fig.width =8}
+vit_c_palette <- c("2T" = "#FEF1CD", 
+                   "3T" = "#FCD56B",
+                   "Post"= "#EB8D07",
+                   light_text = "#323A30",
+                   dark_text =  "#0C1509")
+
+ra_min<-mph_112824 %>% 
+  as.data.frame() %>% 
+  select(`RA-TFATMS Final Conc.`) %>% 
+  apply(2, min)
+
+ra_max<-mph_112824 %>% 
+  as.data.frame() %>% 
+  select(`RA-TFATMS Final Conc.`) %>% 
+  apply(2, max)
+
+ra_hline <- data.frame(
+  mean = c(stats_ra_112824$`mean`),
+  sd1 = c(stats_ra_112824$`sd+1`),
+  sd_1 = c(stats_ra_112824$`sd-1`),
+  sd2 = c(stats_ra_112824$`sd+2`),
+  sd_2 = c(stats_ra_112824$`sd-2`),
+  linetype_mean = factor(1,labels = c("1")),
+  linetype_sd1 = factor(1,labels = c("4")),
+  linetype_sd2 = factor(1,labels = c("6")))
+
+max_min_spiked_ra <- tibble(
+  y_min = c(ra_min),
+  y_max = c(ra_max)
+)
+
+avg_plot1<- mph_112824 %>%
+  ggplot(aes(x = Name, y = `RA-TFATMS Final Conc.`)) + 
+        geom_blank(aes(y = max_min_spiked_ra$y_min)) +
+    geom_blank(aes(y = max_min_spiked_ra$y_max))+
+  geom_line(aes(color=`Name`)) + 
+  geom_point(aes(color=`Name`)) +
+  geom_hline(data = ra_hline, aes(yintercept = ra_hline$mean,linetype = factor(ra_hline$linetype_mean), show_guide = TRUE),
+            color = "blue", size=0.6)+
+  geom_hline(data = ra_hline, aes(yintercept = ra_hline$sd1, linetype = factor(ra_hline$linetype_sd1), show_guide=TRUE),
+             color = "black", size=0.5)+
+  geom_hline(data = ra_hline, aes(yintercept = ra_hline$sd_1, linetype = factor(ra_hline$linetype_sd1), show_guide = TRUE),
+             color = "black", size=0.5)+
+  geom_hline(data = ra_hline, aes(yintercept = ra_hline$sd2, linetype = factor(ra_hline$linetype_sd2), show_guide = TRUE),
+             color = "darkgray", size=0.5)+
+  geom_hline(data = ra_hline, aes(yintercept = ra_hline$sd_2, linetype = factor(ra_hline$linetype_sd2), show_guide = TRUE),
+             color = "darkgray", size=0.5)+
+  guides(color="none")+
+  scale_linetype_manual(values = c(1,5,6), 
+                        labels = c("Running Average", "+/- 1 SD", "+/- 2 SD"),
+                        name = "Control Chart")+
+  theme(axis.title.y = element_text(size=10, face="bold", colour = "black"),
+        axis.text.y = element_text(size=10, face="bold", colour = "black"),
+        strip.text = element_text(face = "bold", size=10))+
+  labs(y="Concentration [ppb]", x = "Sample Name", 
+       title =  paste0("Shewhart chart : Ritalinic Acid (Spiked) \nRA Control chart, Quality Controls for fluctuation assesment "))+
+  scale_fill_manual(values = vit_c_palette)+
+  scale_y_continuous(trans='log10')+
+  theme(text = element_text(colour = vit_c_palette["light_text"],family = "Cabin"),
+        plot.title = element_text(colour = vit_c_palette["dark_text"], #plot title
+                                  size = rel(1), 
+                                  face = "bold",
+                                  family = "Enriqueta",
+                                  lineheight = 1,
+                                  margin = margin(0.5, 0, 1, 0, "lines")),
+        plot.subtitle = element_text(size = rel(1), lineheight = 1,
+                                     margin = margin(0, 0, 1, 0, "lines")),
+        strip.text = element_text(family = "Enriqueta",
+                                  colour = vit_c_palette["light_text"], face = "bold"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
+avg_plot1  
+```
+
+
+
+
+# Sample Plots
+### MPH : by batch - boxplot
+
+```{r MPH by batch plot, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
+
+notes_MPH_samples<-notes_MPH %>%
+  filter(Type == "Sample") %>% 
+  arrange((Batch_num)) %>% 
+  mutate(Placebo = ifelse(`MPH-TFA Final Conc.` > 1, "Yes","No"))
+
+
+#Boxplot
+notes_MPH_samples %>% 
+  filter(Placebo == "Yes") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `MPH-TFA Final Conc.`, fill = factor(Batch_num))) +
+  geom_boxplot(outlier.colour="red", outlier.shape=19,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible no placebo), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+
+#Boxplot
+notes_MPH_samples %>% 
+  filter(Placebo == "No") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `MPH-TFA Final Conc.`, fill = factor(Batch_num))) +
+  geom_boxplot(outlier.colour="red", outlier.shape=19,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible Placebo effect), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+```
+
+### RA : by batch - boxplot
+
+```{r MPH by batch plot, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
+
+notes_RA_samples<-notes_MPH %>%
+  filter(Type == "Sample") %>% 
+  arrange((Batch_num)) %>% 
+  mutate(Placebo = ifelse(`RA-TFATMS Final Conc.` > 10, "Yes","No"))
+
+
+#Boxplot
+notes_RA_samples %>% 
+  filter(Placebo == "Yes") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `RA-TFATMS Final Conc.`, fill = factor(Batch_num))) +
+  geom_boxplot(outlier.colour="red", outlier.shape=19,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible no placebo), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+
+#Boxplot
+notes_RA_samples %>% 
+  filter(Placebo == "No") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `RA-TFATMS Final Conc.`, fill = factor(Batch_num))) +
+  geom_boxplot(outlier.colour="red", outlier.shape=19,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible Placebo effect), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+```
+
+### MPH : by batch - all the samples
+```{r MPH by batch plot, echo=FALSE,message=FALSE,warning=FALSE, results='hide'}
+
+notes_MPH_samples<-notes_MPH %>%
+  filter(Type == "Sample") %>% 
+  arrange((Batch_num)) %>% 
+  mutate(Placebo = ifelse(`MPH-TFA Final Conc.` > 1, "Yes","No"))
+
+
+#Jitter
+notes_MPH_samples %>% 
+  filter(Placebo == "Yes") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `MPH-TFA Final Conc.`, color = factor(Batch_num))) +
+  geom_jitter(size=3,outlier.colour="red", outlier.shape=8,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible no placebo), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+
+#Jitter
+notes_MPH_samples %>% 
+  filter(Placebo == "No") %>% 
+  group_by(Type,Batch_num) %>% 
+  ggplot(aes(x = factor(Batch_num),  y = `MPH-TFA Final Conc.`, color = factor(Batch_num))) +
+  geom_jitter(size=3,outlier.colour="red", outlier.shape=8,
+                outlier.size=5)+
+  labs(y= "Concentration (ppb)", x = "Batch number")+
+  scale_fill_brewer(palette="Set3")+
+  ggtitle("Batch Effect Evaluation - MPH (Possible Placebo effect), by batch number") + 
+  theme(legend.position="none",
+        plot.title = element_text(size=25,hjust = 0.5), 
+        strip.text = element_text(size=25), 
+        axis.text=element_text(size=25),
+        axis.title.y = element_text(size = 25),
+        axis.title.x = element_text(size = 25)
+  )
+```
