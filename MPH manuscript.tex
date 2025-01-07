@@ -1,18 +1,19 @@
 \documentclass[journal=jacsat,manuscript=article]{achemso}
+
+
+\usepackage{biblatex}
+\addbibresource{references.bib} % BibLaTeX bibliography file
 \newcommand*\mycommand[1]{\texttt{\emph{#1}}}
 
-\usepackage{siunitx}
-\usepackage{color,soul}
-\usepackage{lipsum}
-\usepackage{titlesec}
+
 
 \author{Viola Nguyen}
 \email{viola.nguyen@mssm.edu}
 \author{Dhoone Menezes de Sousa}
-\email{dhoone.sousa@mssm.edu}
 \author{Blessing Akitunde}
-\email{blessing.akintunde@mssm.edu}
+\author{Shyamalee Dassanayake}
 \affiliation{Icahn School of Medicine}
+
 
 \title{The use of Solid Phase Extraction (SPE) for detection Methylphenidate and Ritalinic Acid in small volume plasma samples }
 
@@ -25,60 +26,45 @@
 This methology describes an extraction of Methylphenidate (MPH) and Ritalinic Acid (RA), from plasma using solid-phase extraction (SPE), followed by syliation reaction. In addition an ion chromatographic method was developed for the specific GC determination of MPH and RA.  Treated plasma samples were passed through SPE cartridge with Hydrophilic-Lipophilic-Balanced (HLB) sorbent to retain and elute target analytes. Using N-Methyl-N-(trimethylsilyl)trifluoroacetamide (MSTFA) and N-Methyl-bis(trifluoroacetamide) (MBTFA) reagents, eluent was derivatized and the non-polar product was further analyzed using GC-MS. A calibration curve for MPH and RA was constructed in the range  \SIrange[range-units = brackets]{2}{250}{\micro \gram/mL}. The SPE resulted in higher extraction recovery (mean \hl  {x \%}) with \hl {\% R.S.D.s} similar in both matrix and solvent (\hl {x\%}, respectively).
 
 \end{abstract}
-
 \section{Introduction}
 
-Methylphenidate, commony known by the trade name Ritalin\textsuperscript{\textregistered}, is a central nervous system (CNS) stimulant used to treat attention deficit hyperactivity (ADHD) and narcolepsy. 
 
-\section{Experimental}
-The usual experimental details should appear here.  This could
-include a table, which can be referenced as Table~\ref{tbl:example}.
-Notice that the caption is positioned at the top of the table.
-\begin{table}
-  \caption{An example table}
-  \label{tbl:example}
-  \begin{tabular}{ll}
-    \hline
-    Header one  & Header two  \\
-    \hline
-    Entry one   & Entry two   \\
-    Entry three & Entry four  \\
-    Entry five  & Entry five  \\
-    Entry seven & Entry eight \\
-    \hline
-  \end{tabular}
-\end{table}
 
 \subsection{Method and materials}
+Native standards for Ritalinic Acid hydrochloride (1.0 mg/mL in MeOH) and  Methylphenidate hydrochloride (1.0 mg/mL in MeOH) were purchased from Sigma Aldrich (St. Louis MO, USA). Both labeled standards for -threo-Methylphenidate-$D_4$ HCl (\SI{100}{\micro \gram} in MeOH) and -threo-Ritalinic acid-$D_{10}$ HCl (\SI{100}{\micro \gram} in MeOH) were obtained from Cerilliant (Round Rock, TX).
+BioChemed Services (Winchester, VA, USA) provided with bovine plasma. HPLC grade formic acid, ammonium hydroxide,methanol and distilled water were purchased from Fisher Chemical (Nazareth, PA). Alongside with solvents, derivatizer MBTFA [N-methyl-bis(trifluoroacetamide)] was also purchased through Fisher Chemical.  MSTFA (N-methyl-n-trimethylsilyl-trifluoroacetamide) derivatizer was purchased from RESTEK (Bellefonte, PA). Solid-phase extraction columns (Oasis PRiME HLB 3 cc Vac Cartridge, 60 mg) were acquired from Waters Corp (Milford, MA).
 
-Reference 
+
 
 
 
 \subsection{Sample Preparation}
-\subsubsection{GC/MS}
 
 
 \subsection{Instrumentation}
-\subsubsection{GC/MS}
-GC
+
+
+
+
+\subsection{Instrumentation}
+
+The detection of analytes was performed by GC–MS/MS with \hl {XXX} . Mass Hunter QQQ  software was used for the data acquisition and quantification \cite{del2007liquid}
+
+
 
 \section{Results and discussion}
 \subsection{Linearity}
-\subsection{Percision and accuracy}
+\subsection{Precision and accuracy}
 \subsection{Recoveries}
 
 \section{Discussion and conclusion}
 \subsection{Reliability}
 \subsection{Practicality}
-\subsection{Cost}
-
 
 
 
 \section{References}
-
-
+\printbibliography
 
 
 \end{document}
