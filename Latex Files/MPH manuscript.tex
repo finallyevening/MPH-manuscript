@@ -125,12 +125,11 @@ This methology describes an extraction of Methylphenidate (MPH) and Ritalinic Ac
 % The first paragraph of any Science paper does NOT have a heading
 % Nor is it indented
 
-\section{}
-
+%insert Introductior below this line
 
 
 %%%%%%%%%%% METHOD AND MATERIALS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Method and materials}
+\section{Method and materials}
 Native standards for Ritalinic Acid hydrochloride (1.0 mg/mL in MeOH) and  Methylphenidate hydrochloride (1.0 mg/mL in MeOH) were purchased from Sigma Aldrich (St. Louis MO, USA). Both labeled standards for (±)-threo-Methylphenidate-$D_4$ HCl 100ug in MeOH) and (±)-threo-Ritalinic acid-$D_{10}$ HCl (100ug in MeOH) were obtained from Cerilliant (Round Rock, TX).
 BioChemed Services (Winchester, VA, USA) provided with bovine plasma. HPLC grade formic acid, ammonium hydroxide,methanol and distilled water were purchased from Fisher Chemical (Nazareth, PA). Alongside with solvents, derivatizer MBTFA [N-methyl-bis(trifluoroacetamide)] was also purchased through Fisher Chemical.  MSTFA (N-methyl-n-trimethylsilyl-trifluoroacetamide) derivatizer was purchased from RESTEK (Bellefonte, PA). Solid-phase extraction columns (Oasis PRiME HLB 3 cc Vac Cartridge, 60 mg) were acquired from Waters Corp (Milford, MA).
 
@@ -157,11 +156,11 @@ The detection of analytes was performed by GC–MS/MS with XXX . Mass Hunter QQQ
 
 
 
-%Scince Journal notes
+%Science Journal notes
 
 \noindent
-The main text should begin with a brief introduction to the topic, at a level which is understandable by
-scientists in adjacent disciplines. Provide enough information to put your work in context,
+%The main text should begin with a brief introduction to the topic, at a level which is understandable by
+%scientists in adjacent disciplines. Provide enough information to put your work in context,
 but do not attempt a comprehensive review.
 
 General guidance on \LaTeX:
@@ -198,10 +197,6 @@ Variables should be italic but textual labels are roman e.g.~$T_\text{max}$.
 Explain the meaning of all variables on their first appearance.
 More complicated expressions should be entered as numbered equations, such as
 
-\begin{equation}
-	x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}.
-	\label{eq:example} % Use a logical label
-\end{equation}
 
 \noindent\ Do not indent text immediately after an equation.
 They can be referred back to as e.g.~Equation~\ref{eq:example}.
@@ -212,9 +207,9 @@ Use a non-breaking space between a number and its unit e.g.~7.4~km,
 and thin spaces between different parts of a unit e.g.~12~m\,s$^{-1}$.
 Use $\pm$ (not parentheses) to indicate uncertainties e.g.~$g=9.8\pm0.2$~m\,s$^{-2}$.
 
-% Research Articles and Reviews split the text into sections using headings
-% Use a short (up 6 words) descriptive phrase, not generic 'Results' or 'Conclusions'
-% Most other formats do not have headings, see the journal instructions to authors for details
+ Research Articles and Reviews split the text into sections using headings
+ Use a short (up 6 words) descriptive phrase, not generic 'Results' or 'Conclusions'
+ Most other formats do not have headings, see the journal instructions to authors for details
 \subsection*{An example heading}
 Research Articles and Reviews use headings to split the main text into sections;
 most other formats do not have headings.
@@ -232,45 +227,21 @@ Refer to the instructions to authors on the journal website for the current limi
 
 
 %%%%%%%%%%%%%%%% MAIN TEXT FIGURES %%%%%%%%%%%%%%%
-
+\clearpage
 \begin{figure} % Do NOT use \begin{figure*}
 	\centering
-	\includegraphics[width=0.6\textwidth]{example_figure} % for an image file named example_figure.*
+	\includegraphics[width=0.6\textwidth]{MPH_structure} % for an image file named example_figure.*
 	% Pick an appropriate width - in print, figures are usually one or two columns wide, which can
 	% be approximated by 0.3\textwidth or 0.6\textwidth respectively. Use appropriate label sizes.
 
 	% Captions go below figures
-	\caption{\textbf{All captions must start with a short bold sentence, acting as a title.}
-		Then explain what is being shown, the meanings of any line styles, plotting symbols etc.
-		Multi-panel figures must label the panels A, B, C, etc. and refer to them in the caption
-		like this: (\textbf{A}) Description of panel A. (\textbf{B}) Description of panel B.
-		Captions are placed below figures.}
+	\caption{\textbf{Chemical structures of methylphenidate (MPH) and its primary metabolite ritalinic acid (RA).}
+	}
 	\label{fig:example} % give each figure a logical label name
 \end{figure}
 
 
 %%%%%%%%%%%%%%%% MAIN TEXT TABLES %%%%%%%%%%%%%%%
-
-\begin{table} % Do NOT use \begin{table*}
-	\centering
-	% Captions go above tables
-	\caption{\textbf{All captions must start with a short bold sentence, acting as a title.}
-		Then explain what is being listed in the table, the meaning of each column etc.
-		Captions are placed above tables.}
-	\label{tab:example} % give each table a logical label name
-	
-	\begin{tabular}{lccc} % four columns, alignment for each
-		\\
-		\hline
-		Sample & $A$ & $B$ & $C$\\
-		 & (unit) & (unit) & (unit)\\
-		\hline
-		First & 1 & 2 & 3\\
-		Second & 4 & 6 & 8\\
-		Third & 5 & 7 & 9\\
-		\hline
-	\end{tabular}
-\end{table}
 
 
 
@@ -311,24 +282,16 @@ Refer to the instructions to authors on the journal website for the current limi
 %%%%%%%%%%%%%%%% ACKNOWLEDGEMENTS %%%%%%%%%%%%%%%
 
 \section*{Acknowledgments}
-Here you can thank helpful colleagues who did not meet the journal's authorship criteria, or
-provide other acknowledgements that don't fit the (compulsory) subheadings below.
-Formatting requirements for each of these sections differ between the \textit{Science}-family
-journals; consult the instructions to authors on the journal website for full details.
+
+
+\clearpage
+
 \paragraph*{Funding:}
-List the grants, fellowships etc. that funded the research;
-use initials to specify which author(s) were supported by each source.
-Include grant numbers when appropriate or required by the funding agency.
-For example: F.~A. was funded by the Generous Science Agency grant~2372.
+
 \paragraph*{Author contributions:}
-List each author’s contributions to the paper.
-Use initials to abbreviate author names.
+
 \paragraph*{Competing interests:}
-Disclose any potential conflicts of interest for all authors, such as patent applications,
-additional affiliations, consultancies, financial relationships etc.
-See the journal editorial policies web page for types of competing interest that must be declared.
-If there are no competing interests, state:
-``There are no competing interests to declare.''
+
 \paragraph*{Data and materials availability:}
 Specify where the data, software, physical samples, simulation outputs or other materials
 underlying the paper are archived.
@@ -363,8 +326,8 @@ Consult the journal's editorial policies web page for more details.
 \subsection*{Supplementary materials}
 Materials and Methods\\
 Supplementary Text\\
-Figs. S1 to S3\\
-Tables S1 to S4\\
+Figs. S to S\\
+Tables S to S\\
 References \textit{(7-\arabic{enumiv})}\\ % automatically fills out the last reference number
 % (filling out the other numbers automatically is possible but fiddly and liable to break)
 Movie S1\\
@@ -435,11 +398,7 @@ Fig.~\ref{fig:sup_example} and Table~\ref{tab:sup_example}.
 Cite references in the usual way \cite{example2},
 including any that are only cited in the supplement \cite{sm_example,conference_example}.
 
-The numbering of figures, tables, equations and pages has been reset to start from S1, as in
-\begin{equation}
-	\cos(2\theta) = \cos^2\theta - \sin^2\theta.
-	\label{eq:sup_example} % Use a logical label
-\end{equation}
+
 
 \subsubsection*{Example supplement heading}
 
@@ -465,58 +424,18 @@ The two main sections of the supplement can be split up using headings.
 
 %%%%%%%%%%%%%%%% SUPPLEMENTARY FIGURES %%%%%%%%%%%%%%%
 
-\begin{figure} % Do not use \begin{figure*}
-	\centering
-	\includegraphics[width=0.6\textwidth]{example_figure} % for an image file named example_figure.*
-	% Pick an appriopriate width for the size of the image
 
-	% Captions go below figures
-	\caption{\textbf{All captions must start with a short bold sentence, acting as a title.}
-		Follow the same style as main text figures.
-		If the design is substantially the same as another figure, avoid repeating information
-		e.g. say `Same as Figure~\ref{fig:example}, but for the control sample.'}
-	\label{fig:sup_example} % give each figure a logical label name
-\end{figure}
 
 %%%%%%%%%%%%%%%% SUPPLEMENTARY TABLES %%%%%%%%%%%%%%%
 
-\begin{table} % Do not use \begin{table*}
-	\centering
-	% Captions go above tables
-	\caption{\textbf{All captions must start with a short bold sentence, acting as a title.}
-		Follow the same style as main text tables.
-		If the design is similar to previous tables, avoid repetition by refering back to them.}
-	\label{tab:sup_example} % give each table a logical label name
 
-	\begin{tabular}{lccr} % four columns, alignment for each
-		\\
-		\hline
-		A & B & C & D\\
-		\hline
-		1 & 2 & 3 & 4\\
-		2 & 4 & 6 & 8\\
-		3 & 5 & 7 & 9\\
-		\hline
-	\end{tabular}
-\end{table}
 
 
 %%%%%%%%%%% CAPTIONS FOR OTHER SUPPLEMENTARY FILES %%%%%%%%%%
 
 \clearpage % Clear all remaining figures and tables then start a new page
 
-\paragraph{Caption for Movie S1.}
-\textbf{All captions must start with a short bold sentence, acting as a title.}
-Then explain what is shown in the supplementary video file.
-Give as much detail as you would for a figure e.g. explain axes, color maps etc.
-If the video is an animated equivalent of one of the static figures, state e.g.
-`Animated version of Figure~\ref{fig:example}.'
 
-\paragraph{Caption for Data S1.}
-\textbf{All captions must start with a short bold sentence, acting as a title.}
-Then explain what is included in the supplementary data file.
-Give as much detail as you would for a table e.g. explain the meaning of every column,
-units used, any special notation etc.
 
 
 %%%%%%%%%%%%%%%% SUPPLEMENTARY REFERENCES %%%%%%%%%%%%%%%
